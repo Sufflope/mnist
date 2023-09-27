@@ -464,7 +464,7 @@ impl<'a> MnistBuilder<'a> {
             fn digit2one_hot(v: Vec<u8>) -> Vec<u8> {
                 v.iter()
                     .map(|&i| {
-                        let mut v = vec![0; CLASSES as usize];
+                        let mut v = vec![0; CLASSES];
                         v[i as usize] = 1;
                         v
                     })
