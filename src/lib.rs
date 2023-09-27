@@ -457,8 +457,8 @@ impl<'a> MnistBuilder<'a> {
         let mut val_lbl = trn_lbl.split_off(trn_len);
         let mut tst_img = val_img.split_off(val_len * ROWS * COLS);
         let mut tst_lbl = val_lbl.split_off(val_len);
-        tst_img.split_off(tst_len * ROWS * COLS);
-        tst_lbl.split_off(tst_len);
+        tst_img.truncate(tst_len * ROWS * COLS);
+        tst_lbl.truncate(tst_len);
         if self.lbl_format == LabelFormat::OneHotVector {
             fn digit2one_hot(v: Vec<u8>) -> Vec<u8> {
                 v.iter()
