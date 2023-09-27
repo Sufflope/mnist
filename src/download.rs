@@ -20,12 +20,18 @@ use std::os::unix::fs::MetadataExt;
 use std::os::windows::fs::MetadataExt;
 
 #[cfg(target_family = "unix")]
-fn file_size(meta: &MetadataExt) -> usize {
+fn file_size<M>(meta: &M) -> usize
+where
+    M: MetadataExt,
+{
     meta.size() as usize
 }
 
 #[cfg(target_family = "windows")]
-fn file_size(meta: &MetadataExt) -> usize {
+fn file_size<M>(meta: &M) -> usize
+where
+    M: MetadataExt,
+{
     meta.file_size() as usize
 }
 
