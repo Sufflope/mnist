@@ -430,10 +430,9 @@ impl<'a> MnistBuilder<'a> {
         let available_length = (TRN_LEN + TST_LEN) as usize;
         assert!(
             total_length <= available_length,
-            format!(
-                "Total data set length ({}) greater than maximum possible length ({}).",
-                total_length, available_length
-            )
+            "Total data set length ({}) greater than maximum possible length ({}).",
+            total_length,
+            available_length
         );
         let mut trn_img = images(
             &Path::new(self.base_path).join(self.trn_img_filename),
@@ -559,20 +558,18 @@ fn labels(path: &Path, expected_length: u32) -> Vec<u8> {
         .unwrap_or_else(|_| panic!("Unable to read magic number from {:?}.", path));
     assert!(
         LBL_MAGIC_NUMBER == magic_number,
-        format!(
-            "Expected magic number {} got {}.",
-            LBL_MAGIC_NUMBER, magic_number
-        )
+        "Expected magic number {} got {}.",
+        LBL_MAGIC_NUMBER,
+        magic_number
     );
     let length = file
         .read_u32::<BigEndian>()
         .unwrap_or_else(|_| panic!("Unable to length from {:?}.", path));
     assert!(
         expected_length == length,
-        format!(
-            "Expected data set length of {} got {}.",
-            expected_length, length
-        )
+        "Expected data set length of {} got {}.",
+        expected_length,
+        length
     );
     file.bytes().map(|b| b.unwrap()).collect()
 }
@@ -596,20 +593,18 @@ fn images(path: &Path, expected_length: u32) -> Vec<u8> {
         .unwrap_or_else(|_| panic!("Unable to read magic number from {:?}.", path));
     assert!(
         IMG_MAGIC_NUMBER == magic_number,
-        format!(
-            "Expected magic number {} got {}.",
-            IMG_MAGIC_NUMBER, magic_number
-        )
+        "Expected magic number {} got {}.",
+        IMG_MAGIC_NUMBER,
+        magic_number
     );
     let length = file
         .read_u32::<BigEndian>()
         .unwrap_or_else(|_| panic!("Unable to length from {:?}.", path));
     assert!(
         expected_length == length,
-        format!(
-            "Expected data set length of {} got {}.",
-            expected_length, length
-        )
+        "Expected data set length of {} got {}.",
+        expected_length,
+        length
     );
     let rows = file
         .read_u32::<BigEndian>()
@@ -617,7 +612,9 @@ fn images(path: &Path, expected_length: u32) -> Vec<u8> {
         as usize;
     assert!(
         ROWS == rows,
-        format!("Expected rows length of {} got {}.", ROWS, rows)
+        "Expected rows length of {} got {}.",
+        ROWS,
+        rows
     );
     let cols = file
         .read_u32::<BigEndian>()
@@ -625,7 +622,9 @@ fn images(path: &Path, expected_length: u32) -> Vec<u8> {
         as usize;
     assert!(
         COLS == cols,
-        format!("Expected cols length of {} got {}.", COLS, cols)
+        "Expected cols length of {} got {}.",
+        COLS,
+        cols
     );
     // Convert `file` from a Vec to a slice.
     file.to_vec()
