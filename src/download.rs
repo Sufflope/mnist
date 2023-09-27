@@ -110,7 +110,7 @@ fn download(
             pb.finish_println(" ");
         });
 
-        easy.url(&url.to_str().unwrap()).unwrap();
+        easy.url(url.to_str().unwrap()).unwrap();
         easy.write_function(move |data| {
             file.write_all(data).unwrap();
             Ok(data.len())
@@ -124,8 +124,8 @@ fn download(
 }
 
 fn extract(archive_name: &str, download_dir: &Path) -> Result<(), String> {
-    let archive = download_dir.join(&archive_name);
-    let extract_to = download_dir.join(&archive_name.replace(".gz", ""));
+    let archive = download_dir.join(archive_name);
+    let extract_to = download_dir.join(archive_name.replace(".gz", ""));
     if extract_to.exists() {
         log::info!(
             "  Extracted file {:?} already exists, skipping extraction.",
