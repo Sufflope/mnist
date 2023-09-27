@@ -102,6 +102,7 @@ use std::path::Path;
 
 static BASE_PATH: &str = "data/";
 static BASE_URL: &str = "http://yann.lecun.com/exdb/mnist";
+#[cfg(feature = "download")]
 static FASHION_BASE_URL: &str = "http://fashion-mnist.s3-website.eu-central-1.amazonaws.com";
 static TRN_IMG_FILENAME: &str = "train-images-idx3-ubyte";
 static TRN_LBL_FILENAME: &str = "train-labels-idx1-ubyte";
@@ -401,17 +402,18 @@ impl<'a> MnistBuilder<'a> {
     /// If `trn_len + val_len + tst_len > 70,000`.
     pub fn finalize(&self) -> Mnist {
         if self.download_and_extract {
-            let base_url = if self.use_fashion_data {
-                FASHION_BASE_URL
-            } else if self.base_url != BASE_URL {
-                self.base_url
-            } else {
-                BASE_URL
-            };
-
             #[cfg(feature = "download")]
-            download::download_and_extract(base_url, &self.base_path, self.use_fashion_data)
-                .unwrap();
+            {
+                let base_url = if self.use_fashion_data {
+                    FASHION_BASE_URL
+                } else if self.base_url != BASE_URL {
+                    self.base_url
+                } else {
+                    BASE_URL
+                };
+                download::download_and_extract(base_url, &self.base_path, self.use_fashion_data)
+                    .unwrap();
+            }
             #[cfg(not(feature = "download"))]
             {
                 log::warn!("WARNING: Download disabled.");
