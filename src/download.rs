@@ -103,7 +103,7 @@ fn download(
             let mut current_size = 0;
             while current_size < full_size {
                 let meta = fs::metadata(file_name.clone())
-                    .expect(&format!("Couldn't get metadata on {:?}", file_name));
+                    .unwrap_or_else(|_| panic!("Couldn't get metadata on {:?}", file_name));
 
                 current_size = file_size(&meta);
 
