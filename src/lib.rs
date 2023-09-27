@@ -463,12 +463,11 @@ impl<'a> MnistBuilder<'a> {
         if self.lbl_format == LabelFormat::OneHotVector {
             fn digit2one_hot(v: Vec<u8>) -> Vec<u8> {
                 v.iter()
-                    .map(|&i| {
+                    .flat_map(|&i| {
                         let mut v = vec![0; CLASSES];
                         v[i as usize] = 1;
                         v
                     })
-                    .flatten()
                     .collect()
             }
             trn_lbl = digit2one_hot(trn_lbl);
