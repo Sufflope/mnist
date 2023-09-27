@@ -10,6 +10,7 @@ use std::fs::File;
 use pbr::ProgressBar;
 use std::convert::TryInto;
 use std::thread;
+use std::time::Duration;
 
 use log::Level;
 
@@ -101,7 +102,7 @@ fn download(
                 current_size = file_size(&meta);
 
                 pb.set(current_size.try_into().unwrap());
-                thread::sleep_ms(10);
+                thread::sleep(Duration::from_millis(10));
             }
             pb.finish_println(" ");
         });
