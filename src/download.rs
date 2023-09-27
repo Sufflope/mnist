@@ -54,12 +54,8 @@ pub(super) fn download_and_extract(
             "Download directory {} does not exists. Creating....",
             download_dir.display()
         );
-        fs::create_dir_all(&download_dir).or_else(|e| {
-            Err(format!(
-                "Failed to create directory {:?}: {:?}",
-                download_dir, e
-            ))
-        })?;
+        fs::create_dir_all(&download_dir)
+            .map_err(|e| format!("Failed to create directory {:?}: {:?}", download_dir, e))?;
     }
 
     for &(archive, size) in ARCHIVES_TO_DOWNLOAD {
@@ -134,25 +130,18 @@ fn extract(archive_name: &str, download_dir: &Path) -> Result<(), String> {
     } else {
         log::info!("Extracting archive {:?} to {:?}...", archive, extract_to);
         let file_in = fs::File::open(&archive)
-            .or_else(|e| Err(format!("Failed to open archive {:?}: {:?}", archive, e)))?;
+            .map_err(|e| format!("Failed to open archive {:?}: {:?}", archive, e))?;
         let file_in = io::BufReader::new(file_in);
-        let file_out = fs::File::create(&extract_to).or_else(|e| {
-            Err(format!(
-                "  Failed to create extracted file {:?}: {:?}",
-                archive, e
-            ))
-        })?;
+        let file_out = fs::File::create(&extract_to)
+            .map_err(|e| format!("  Failed to create extracted file {:?}: {:?}", archive, e))?;
         let mut file_out = io::BufWriter::new(file_out);
         let mut gz = flate2::bufread::GzDecoder::new(file_in);
         let mut v: Vec<u8> = Vec::with_capacity(10 * 1024 * 1024);
         gz.read_to_end(&mut v)
-            .or_else(|e| Err(format!("Failed to extract archive {:?}: {:?}", archive, e)))?;
-        file_out.write_all(&v).or_else(|e| {
-            Err(format!(
-                "Failed to write extracted data to {:?}: {:?}",
-                archive, e
-            ))
-        })?;
+            .map_err(|e| format!("Failed to extract archive {:?}: {:?}", archive, e))?;
+        file_out
+            .write_all(&v)
+            .map_err(|e| format!("Failed to write extracted data to {:?}: {:?}", archive, e))?;
     }
     Ok(())
 }
