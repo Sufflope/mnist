@@ -50,11 +50,7 @@ const ARCHIVES_TO_DOWNLOAD: &[(&str, usize)] = &[
     (ARCHIVE_TEST_LABELS, ARCHIVE_TEST_LABELS_SIZE),
 ];
 
-pub(super) fn download_and_extract(
-    base_url: &str,
-    base_path: &str,
-    use_fashion_data: bool,
-) -> Result<(), String> {
+pub(super) fn download_and_extract(base_url: &str, base_path: &str) -> Result<(), String> {
     let download_dir = PathBuf::from(base_path);
     if !download_dir.exists() {
         log::info!(
@@ -67,7 +63,7 @@ pub(super) fn download_and_extract(
 
     for &(archive, size) in ARCHIVES_TO_DOWNLOAD {
         log::info!("Attempting to download and extract {}...", archive);
-        download(base_url, archive, size, &download_dir, use_fashion_data)?;
+        download(base_url, archive, size, &download_dir)?;
         extract(archive, &download_dir)?;
     }
     Ok(())
@@ -78,7 +74,6 @@ fn download(
     archive: &str,
     full_size: usize,
     download_dir: &Path,
-    use_fashion_data: bool,
 ) -> Result<(), String> {
     let mut easy = Easy::new();
     let url = Path::new(base_url).join(archive);

@@ -411,8 +411,7 @@ impl<'a> MnistBuilder<'a> {
                 } else {
                     BASE_URL
                 };
-                download::download_and_extract(base_url, self.base_path, self.use_fashion_data)
-                    .unwrap();
+                download::download_and_extract(base_url, self.base_path).unwrap();
             }
             #[cfg(not(feature = "download"))]
             {
