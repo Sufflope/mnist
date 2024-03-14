@@ -81,10 +81,10 @@ fn download(
     let url = Path::new(base_url).join(archive);
     let file_name = download_dir.to_str().unwrap().to_owned() + archive; //.clone();
     if Path::new(&file_name).exists() {
-            log::info!(
-                "  File {:?} already exists, skipping downloading.",
-                file_name
-            );
+        log::info!(
+            "  File {:?} already exists, skipping downloading.",
+            file_name
+        );
     } else {
         log::info!(
             "- Downloading from file from {} and saving to file as: {}",
